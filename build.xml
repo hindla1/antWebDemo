@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="war demo" default="build">
+  <target name="build">
+       <war warfile="target/antDemo.war" needxmlfile='false'>
+           <fileset dir="antDemo"> 
+           </fileset> 
+       </war>
+   </target>
+
+</project>
