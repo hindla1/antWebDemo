@@ -1,0 +1,43 @@
+pipeline{
+    agent any
+    stages{
+        stage('Git Checkout'){
+            steps{
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '42e751b6-a923-419b-857d-cc4d0092c857', url: 'https://github.com/hindla1/antWebDemo.git']]])
+            }
+        }
+        stage('build'){
+            steps{
+                 sh 'ant -f build.xml'
+            }
+        }
+        stage('deploy'){
+            
+            steps{
+            deploy adapters: [tomcat8(credentialsId: 'tomcat_deploy', path: '', url: 'http://3.238.39.37:8080/')], contextPath: null, war: 'target/antDemo.war'
+        }
+        }
+        stage('test'){
+            steps{
+                echo "test phse"
+                sleep 10
+            }
+        }
+     stage('parallel stages'){
+     parallel{
+         stage('stage A'){
+             steps{
+                 echo "parallel step"
+                 sleep 5
+             }
+         }
+         stage('stage B'){
+             steps{
+                 echo "parallel step B"
+                 sleep 5
+             }
+         }
+     }
+     }
+    }
+}
